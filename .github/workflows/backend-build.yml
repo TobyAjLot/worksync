@@ -1,0 +1,38 @@
+name: Backend Build (dev branch)
+
+# run only on pushes to dev so we can test without deploying
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore dependencies
+        working-directory: ./backend
+        run: dotnet restore
+
+      - name: Build
+        working-directory: ./backend
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests (if present)
+        working-directory: ./backend
+        run: |
+          if [ -d "./tests" ]; then
+            dotnet test --no-build --verbosity normal
+          else
+            echo "No tests directory detected, skipping tests"
+          fi
