@@ -7,9 +7,9 @@ on:
 
 jobs:
   deploy:
-    name: Deploy Backend
+    name: Deploy app
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    concurrency: deploy-group # optional: ensure only one action runs at a time
 
     steps:
       - name: Checkout code
@@ -25,9 +25,10 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Deploy to Fly.io
-        uses: superfly/flyctl-actions@v1
-        with:
-          args: "deploy ./backend --remote-only --config ./backend/fly.toml --dockerfile ./backend/Dockerfile"
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
+      - name: Deploy Application
+        working-directory: ./backend
+        run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
