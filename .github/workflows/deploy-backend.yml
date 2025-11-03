@@ -26,6 +26,7 @@ jobs:
 
       - name: Deploy to Fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Deploy Application
         working-directory: ./backend
         run: flyctl deploy --remote-only
