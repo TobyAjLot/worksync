@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy app
+    name: Deploy backend
     runs-on: ubuntu-latest
     concurrency: deploy-group # optional: ensure only one action runs at a time
 
@@ -24,10 +24,10 @@ jobs:
         working-directory: ./backend
         run: dotnet build --configuration Release
 
-      - name: Deploy to Fly.io
+      - name: Setup Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Deploy Application
+      - name: Deploy to Fly.io
         working-directory: ./backend
         run: flyctl deploy --remote-only
         env:

@@ -26,6 +26,20 @@ services:
     networks:
       - worksync-network
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: worksync-frontend
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:5000"
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    networks:
+      - worksync-network
+
 volumes:
   sql_data:
 
