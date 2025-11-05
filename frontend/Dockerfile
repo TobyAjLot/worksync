@@ -1,5 +1,5 @@
 # Use lightweight Node.js image
-FROM node:18-alpine AS base
+FROM node:lts-alpine AS base
 
 # Stage 1: Install dependencies
 FROM base AS deps
